@@ -60,41 +60,41 @@ h1, h2, h3 { color: #2E7D32; }
 # Main Header
 st.markdown('<div class="main-header">Smart Food Dehydrator Dashboard</div>', unsafe_allow_html=True)
 
-# 1. FULL DATASET
+# 1. FULL DATASET (Household Fast-Dehydrate Optimized)
 FOOD_DEHYDRATOR_PRESETS = {
     "fruits": {
-        "apple": {"temp": 135, "time": "6-12 hours", "thickness": "1/4 inch"},
-        "banana": {"temp": 135, "time": "8-12 hours", "thickness": "1/4 inch"},
-        "strawberry": {"temp": 135, "time": "6-10 hours", "thickness": "1/2 inch"},
-        "mango": {"temp": 135, "time": "8-12 hours", "thickness": "1/4 inch"},
-        "pineapple": {"temp": 135, "time": "8-12 hours", "thickness": "1/4 inch"}
+        "apple": {"temp": 135, "time": "30-45 minutes", "thickness": "1/4 inch"},
+        "banana": {"temp": 135, "time": "45-60 minutes", "thickness": "1/4 inch"},
+        "strawberry": {"temp": 135, "time": "30-45 minutes", "thickness": "1/2 inch"},
+        "mango": {"temp": 135, "time": "45-60 minutes", "thickness": "1/4 inch"},
+        "pineapple": {"temp": 135, "time": "45-60 minutes", "thickness": "1/4 inch"}
     },
     "vegetables": {
-        "tomato": {"temp": 135, "time": "6-10 hours", "thickness": "1/4 inch"},
-        "zucchini": {"temp": 135, "time": "4-8 hours", "thickness": "1/4 inch"},
-        "carrot": {"temp": 125, "time": "6-10 hours", "thickness": "1/8 inch"},
-        "bell_pepper": {"temp": 125, "time": "8-12 hours", "thickness": "1/4 inch"},
-        "onion": {"temp": 125, "time": "6-10 hours", "thickness": "1/4 inch"}
+        "tomato": {"temp": 135, "time": "30-45 minutes", "thickness": "1/4 inch"},
+        "zucchini": {"temp": 135, "time": "20-30 minutes", "thickness": "1/4 inch"},
+        "carrot": {"temp": 125, "time": "30-45 minutes", "thickness": "1/8 inch"},
+        "bell_pepper": {"temp": 125, "time": "40-50 minutes", "thickness": "1/4 inch"},
+        "onion": {"temp": 125, "time": "30-45 minutes", "thickness": "1/4 inch"}
     },
     "meats": {
-        "beef_jerky": {"temp": 165, "time": "4-8 hours", "thickness": "1/8 inch", "note": "Pre-cook meat"},
-        "turkey_jerky": {"temp": 165, "time": "4-8 hours", "thickness": "1/8 inch", "note": "Pre-cook meat"},
-        "salmon": {"temp": 145, "time": "4-6 hours", "thickness": "1/4 inch", "note": "Safe handling required"}
+        "beef_jerky": {"temp": 165, "time": "60-90 minutes", "thickness": "1/8 inch", "note": "Pre-cook meat"},
+        "turkey_jerky": {"temp": 165, "time": "60-90 minutes", "thickness": "1/8 inch", "note": "Pre-cook meat"},
+        "salmon": {"temp": 145, "time": "45-60 minutes", "thickness": "1/4 inch", "note": "Safe handling required"}
     },
     "nuts": {
-        "almonds": {"temp": 155, "time": "12-24 hours", "thickness": "N/A"},
-        "walnuts": {"temp": 155, "time": "12-24 hours", "thickness": "N/A"},
-        "pecans": {"temp": 155, "time": "12-24 hours", "thickness": "N/A"}
+        "almonds": {"temp": 155, "time": "60-120 minutes", "thickness": "N/A"},
+        "walnuts": {"temp": 155, "time": "60-120 minutes", "thickness": "N/A"},
+        "pecans": {"temp": 155, "time": "60-120 minutes", "thickness": "N/A"}
     },
     "herbs": {
-        "basil": {"temp": 95, "time": "2-4 hours", "thickness": "N/A"},
-        "parsley": {"temp": 95, "time": "2-4 hours", "thickness": "N/A"},
-        "oregano": {"temp": 95, "time": "2-4 hours", "thickness": "N/A"}
+        "basil": {"temp": 95, "time": "10-20 minutes", "thickness": "N/A"},
+        "parsley": {"temp": 95, "time": "10-20 minutes", "thickness": "N/A"},
+        "oregano": {"temp": 95, "time": "10-20 minutes", "thickness": "N/A"}
     },
     "berries": {
-        "blueberry": {"temp": 135, "time": "10-16 hours", "thickness": "1/2 inch"},
-        "raspberry": {"temp": 135, "time": "10-16 hours", "thickness": "1/2 inch"},
-        "blackberry": {"temp": 135, "time": "10-16 hours", "thickness": "1/2 inch"}
+        "blueberry": {"temp": 135, "time": "45-60 minutes", "thickness": "1/2 inch"},
+        "raspberry": {"temp": 135, "time": "45-60 minutes", "thickness": "1/2 inch"},
+        "blackberry": {"temp": 135, "time": "45-60 minutes", "thickness": "1/2 inch"}
     }
 }
 
@@ -152,9 +152,9 @@ with col_left:
         
         # 3. Safety warnings for meats
         if selected_cat == "meats":
-            st.error("⚠️ **SAFETY WARNING:** " + selected_settings.get('note', 'Safe handling required'))
+            st.error("⚠️ **SAFETY WARNING:** " + str(selected_settings.get('note', 'Safe handling required')))
         elif "note" in selected_settings:
-            st.info("ℹ️ **Note:** " + selected_settings['note'])
+            st.info("ℹ️ **Note:** " + str(selected_settings['note']))
     elif user_input:
         st.warning("Food not found in presets! Select from dropdown.")
 
@@ -189,14 +189,17 @@ if st.session_state.dehydrator_running and st.session_state.start_time:
     minutes, seconds = divmod(remainder, 60)
     elapsed_str = f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
     
-    target_hours = 12
-    time_str = st.session_state.target_settings.get("time", "12")
+    time_str = st.session_state.target_settings.get("time", "60 minutes").lower()
     nums = re.findall(r'\d+', time_str)
-    if nums:
-        target_hours = int(nums[-1])
-        
-    total_seconds = target_hours * 3600
+    unit_val = int(nums[-1]) if nums else 60
     
+    if "minute" in time_str:
+        total_seconds = unit_val * 60
+    elif "hour" in time_str:
+        total_seconds = unit_val * 3600
+    else:
+        total_seconds = unit_val * 60 # fallback to minutes
+        
     progress_val = min(elapsed_seconds / total_seconds, 1.0)
     rem_seconds = max(total_seconds - elapsed_seconds, 0)
     
@@ -265,7 +268,7 @@ with col_center:
         x=0.8, y=0.85,
         text="⚠️ 165°F Red Zone",
         showarrow=False,
-        font=dict(size=13, color="#ee5a24", weight="bold")
+        font={"size": 13, "color": "#ee5a24", "weight": "bold"}
     )
     fig_gauge.update_layout(height=320, margin=dict(l=20, r=20, t=50, b=20), paper_bgcolor="rgba(0,0,0,0)")
     st.plotly_chart(fig_gauge, use_container_width=True)
@@ -306,7 +309,7 @@ with col_chart_right:
     
     fig_pie = px.pie(df_pie, values='Count', names='Category', hole=0.4,
                      color_discrete_sequence=["#2E7D32", "#667eea", "#764ba2", "#ff6b6b", "#ee5a24", "#f1c40f"])
-    fig_pie.update_traces(textposition='inside', textinfo='percent+label', marker=dict(line=dict(color='#ffffff', width=2)))
+    fig_pie.update_traces(textposition='inside', textinfo='percent+label', marker={"line": {"color": '#ffffff', "width": 2}})
     fig_pie.update_layout(height=300, margin=dict(l=0, r=0, t=20, b=0), showlegend=False)
     st.plotly_chart(fig_pie, use_container_width=True)
 

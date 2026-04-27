@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Food Dehydrator Dashboard</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+    <div id="app-bg"></div>
+    <div id="app-overlay"></div>
+    <div class="app-container">
+        <header class="main-header">
+            <h1>Smart Food Dehydrator UI</h1>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Left Column: Controls -->
+            <div class="glass-card col-left">
+                <h2><span class="icon">📝</span> Food Input</h2>
+                <div class="input-group">
+                    <label for="food-search">Search (e.g. apple, beef_jerky)</label>
+                    <input type="text" id="food-search" placeholder="Search datasets...">
+                    <label for="food-select" style="margin-top: 1rem;">Or Choose Preset:</label>
+                    <select id="food-select">
+                        <option value="">-- Choose from presets --</option>
+                    </select>
+                </div>
+                
+                <div id="settings-display" class="settings-box hidden">
+                    <p><strong>🌡️ Temp:</strong> <span id="disp-temp"></span>°F</p>
+                    <p><strong>⏱️ Time:</strong> <span id="disp-time"></span></p>
+                    <p><strong>📏 Thickness:</strong> <span id="disp-thickness"></span></p>
+                    <div id="warning-box" class="warning-box hidden"></div>
+                </div>
+
+                <hr class="divider">
+                
+                <button id="btn-start" class="btn btn-primary">▶️ START DEHYDRATOR</button>
+                <button id="btn-stop" class="btn btn-danger hidden">⏹️ STOP DEHYDRATOR</button>
+            </div>
+
+            <!-- Center Column: Status & Gauge -->
+            <div class="glass-card col-center">
+                <h2><span class="icon">🌡️</span> Device Status</h2>
+                <div id="gauge-container" class="chart-container"></div>
+            </div>
+
+            <!-- Right Column: Progress Tracker -->
+            <div class="glass-card col-right">
+                <h2><span class="icon">⏱️</span> Tracker</h2>
+                <div id="status-badge" class="status-badge idle">IDLE</div>
+                
+                <div class="metrics">
+                    <div class="metric">
+                        <span class="metric-label">Time Elapsed</span>
+                        <span id="time-elapsed" class="metric-value">00:00:00</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Time Remaining</span>
+                        <span id="time-remaining" class="metric-value">00:00:00</span>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-label">Progress: <span id="progress-percent">0.0%</span></div>
+                    <div class="progress-bar-bg">
+                        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="glass-card chart-card">
+                <h3>📈 24hr Temp History</h3>
+                <div id="line-container" class="chart-container"></div>
+            </div>
+            <div class="glass-card chart-card">
+                <h3>🍎 Presets Database</h3>
+                <div id="pie-container" class="chart-container"></div>
+            </div>
+        </div>
+
+        <footer class="safety-footer">
+            <h3>🛡️ Safety Guidelines</h3>
+            <ul>
+                <li>Always follow food safety guidelines</li>
+                <li>Pre-cook meats to safe internal temperature</li>
+                <li>Clean trays before and after use</li>
+                <li>Monitor first batches for perfect results</li>
+            </ul>
+        </footer>
+    </div>
+    <script src="script.js?v=3"></script>
+</body>
+</html>
